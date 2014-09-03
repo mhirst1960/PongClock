@@ -1,0 +1,85 @@
+@charset "utf-8";
+/* CSS Document */
+
+html {
+	background-color: black;
+	text-align: center;
+	overflow: hidden;
+}
+
+#all {
+	top: 0%;
+	border-top-color: white;
+	border-top-style: solid;
+	border-bottom-color: white;
+	border-bottom-style: solid;
+	position: relative;
+	overflow: hidden;
+}
+#centerLine {
+	position: absolute;
+	height: 100%;
+	left: 49.5%;
+	border-left: 0 dashed white;
+}
+.paddle {
+	position: absolute;
+}
+#paddleLeft {
+	border-right: 0 solid white;
+}
+#paddleRight {
+	border-left: 0 solid white;
+}
+#ball {
+	position: absolute;
+	background-color: white;
+}
+
+#score {
+	position: relative;
+}
+#scoreLeft {
+	width: 50%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+#scoreRight {
+	width: 50%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 50%;
+}
+
+.scoreDigits {
+	display: table;
+	margin-left: auto;
+	margin-right: auto;
+}
+.scoreColumnDigit {
+	display: table-column-group;
+}
+.scoreColumnSpace {
+	display: table-column-group;
+}
+.scoreDigitsRow {
+	display: table-row;
+}
+.scoreDigitsCell {
+	display: table-cell;
+}
+.hour, .minute {
+	border-left-color: white;
+	border-right-color: white;
+}
+.upper {
+	border-top-color: white;
+	border-bottom-color: white;
+}
+.lower {
+	border-top-color: white;
+	border-bottom-color: white;
+}
