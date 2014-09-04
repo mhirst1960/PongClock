@@ -1,0 +1,18 @@
+STANDARD BACKUP
+---------------
+cd "C:\Users\Joe DeRose\Documents\My Webs\Joe - Bluehost\about\examples\PongClock"
+git add --all
+git status
+git commit -m "Description"
+git status
+git push -u origin master
+git status
+
+IF FILES HAVE BEEN DELETED WITHOUT USING GIT
+--------------------------------------------
+git add -u
+
+RESTORE
+-------
+cd "C:\Users\Joe Laptop\Documents\My Webs\Joe - Bluehost\MARTA"
+git checkout HEAD "subfolder\subfolder\subfolder\filename.ext"

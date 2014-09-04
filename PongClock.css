@@ -5,6 +5,15 @@ html {
 	background-color: black;
 	text-align: center;
 	overflow: hidden;
+	height: 100%;
+}
+
+#showAlert {
+	display: none;
+	text-align: center;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	color: white;
 }
 
 #all {

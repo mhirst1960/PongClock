@@ -7,6 +7,7 @@ var fieldMissRight;
 var ballLeft;
 var ballTop;
 var ballReturn;			// false if the hour or minute needs to be advanced (i.e., that the other side should miss)
+var ballMovement;
 var ballHorizontal;
 var ballVertical;
 var paddleZone;
@@ -25,41 +26,6 @@ function startClock() {
 	var lineWidth = Math.round( fieldHeight * 0.025 );
 	var digitWidth = Math.round( lineWidth / 4 );
 	var paddleHeight = lineWidth * 5;
-	paddleJSON = {
-		"upper miss" :
-			{
-				"offset" : lineWidth * 2
-			},
-		"upper edge" :
-			{
-				"offset" : 0,
-				"ballVertical" : -2
-			},
-		"upper middle" :
-			{
-				"offset" : -lineWidth,
-				"ballVertical" : -1
-			},
-		"middle" :
-			{
-				"offset" : lineWidth * -2,
-				"ballVertical" : 0
-			},
-		"lower middle" :
-			{
-				"offset" : lineWidth * -3,
-				"ballVertical" : 1
-			},
-		"lower edge" :
-			{
-				"offset" : lineWidth * -4,
-				"ballVertical" : 2
-			},
-		"lower miss" :
-			{
-				"offset" : lineWidth * -6
-			}
-	}
 	
 	// Make everything fit the current screen
 	$( "#all" ).css( "height", fieldHeight + "px" );
@@ -78,6 +44,14 @@ function startClock() {
 	$( ".hour, .minute" ).css( "border-left-width", ( digitWidth * 2 ) + "px" ).css( "border-right-width", ( digitWidth * 2 ) + "px" );
 	$( ".upper" ).css( "border-top-width", ( digitWidth * 2 ) + "px" ).css( "border-bottom-width", digitWidth + "px" );
 	$( ".lower" ).css( "border-top-width", digitWidth + "px" ).css( "border-bottom-width", ( digitWidth * 2 ) + "px" );
+
+	if ( $( "html" ).height() < 150 || $( "html" ).width() < 150 ) {
+		$( "#showAlert" ).show();
+		$( "#showGame" ).hide();
+	} else {
+		$( "#showAlert" ).hide();
+		$( "#showGame" ).show();
+	}
 	
 	var ballHeight = $( "#ball" ).height();
 	var ballWidth = $( "#ball" ).width();
@@ -85,15 +59,56 @@ function startClock() {
 	fieldBottom = $( "#all" ).height() - ballHeight;
 	fieldLeft = $( "#paddleLeft" ).position().left + parseInt( $( "#paddleLeft" ).css( "border-right-width" ) );
 	fieldRight = $( "#paddleRight" ).position().left - ballWidth;
+	var fieldWidth = fieldRight - fieldLeft;
 	fieldMissLeft = -lineWidth;
 	fieldMissRight = $( "#all" ).width();
 	
 	$( "#ball" ).css( "left", ballLeft + "px" ).css( "top", ballTop + "px" );
+	
+	var secondsToCrossField = 3;
+	ballMovement = Math.max( 1, Math.round( ( fieldWidth / 100 ) / ( secondsToCrossField * 2 ) ) );
+		// 100 to correlate this value with the setInterval value, which is hard-coded as 10ms.
+		// ballVertical is the basic unit of ball movement, from which other values are multiples.
+	ballVertical = ballMovement;
+	ballHorizontal = ballVertical * 2;
+	paddleJSON = {
+		"upper miss" :
+			{
+				"offset" : lineWidth * 2
+			},
+		"upper edge" :
+			{
+				"offset" : 0,
+				"ballVertical" : -2 * ballMovement
+			},
+		"upper middle" :
+			{
+				"offset" : -lineWidth,
+				"ballVertical" : -ballMovement
+			},
+		"middle" :
+			{
+				"offset" : lineWidth * -2,
+				"ballVertical" : 0
+			},
+		"lower middle" :
+			{
+				"offset" : lineWidth * -3,
+				"ballVertical" : ballMovement
+			},
+		"lower edge" :
+			{
+				"offset" : lineWidth * -4,
+				"ballVertical" : 2 * ballMovement
+			},
+		"lower miss" :
+			{
+				"offset" : lineWidth * -6
+			}
+	}
+	
 	AdvanceClock();	
-	
-	ballHorizontal = 2;
-	ballVertical = 1;
-	
+
 	paddleZone = ChangePaddleZone();
 
 	if ( typeof clockInterval !== "undefined" ) {
@@ -184,7 +199,7 @@ function ChangePaddleZone() {
 function MovePaddle() {
 	var activePaddle;
 	var activePaddlePosition;
-	var pixelsToMovePaddle = 3;
+	var pixelsToMovePaddle = 4 * ballMovement;
 	if ( ballHorizontal < 0 ) {
 		activePaddle = "paddleLeft";
 	} else {
