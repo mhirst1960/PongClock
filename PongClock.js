@@ -14,7 +14,7 @@ var paddleZone;
 var paddleJSON;
 var hour;
 var minutes;
-
+var clock12 = false;  // set to true for 12-hour am/pm clock
 
 function startClock() {
 
@@ -107,6 +107,8 @@ function startClock() {
 			}
 	}
 	
+	SetStyle1224();
+
 	AdvanceClock();	
 
 	paddleZone = ChangePaddleZone();
@@ -120,6 +122,20 @@ function startClock() {
 		},
 		10
 	);
+}
+
+function SetStyle1224() {
+
+	const myURL = window.location.href
+	var url = new URL(myURL);
+
+	let style = url.searchParams.get('style')
+	if (style == "12" ) {
+		clock12 = true;
+	} else {
+		clock12 = false;
+	}
+
 }
 
 function InitialPlacement() {
@@ -220,8 +236,14 @@ function MovePaddle() {
 function AdvanceClock() {
 	var timeNow = new Date();
 	hour = timeNow.getHours();
+
+	var hr = hour;
+	if (clock12) {
+		hr = hr % 12;
+  		hr = hr ? hr : 12; // the hour '0' should be '12'
+	}
 	minutes = timeNow.getMinutes();
-	ShowDigits( hour, "hour" );
+	ShowDigits( hr, "hour" );
 	ShowDigits( minutes, "minute" );
 	InitialPlacement();
 }
